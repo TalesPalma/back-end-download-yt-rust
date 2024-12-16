@@ -1,43 +1,21 @@
 use std::process::Command;
 
+use interface::menu::menu_interface;
+use service::service_donwload::baixar_playlist;
+mod interface;
+mod service;
+
 #[tokio::main]
 async fn main() {
+    init_program_menu().await;
+}
+
+async fn init_program_menu() {
     let mut url_playlist = String::new();
-    menu();
+    menu_interface();
     std::io::stdin().read_line(&mut url_playlist).unwrap();
     let url_playlist = url_playlist.trim();
     baixar_playlist(url_playlist).await.unwrap();
     Command::new("clear").status().unwrap();
     println!("Playlist baixada com sucesso!");
-}
-
-async fn baixar_playlist(url_playlist: &str) -> Result<(), std::io::Error> {
-    let status = Command::new("yt-dlp")
-        .args(&[
-            "-x",
-            "--audio-format",
-            "mp3",
-            "--yes-playlist",
-            "-o",
-            "~/Musicas/%(title)s.%(ext)s",
-            url_playlist,
-        ])
-        .status()
-        .expect("Erro with download playlist");
-
-    if status.success() {
-        Ok(())
-    } else {
-        Err(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            "Error with download playlist",
-        ))
-    }
-}
-
-fn menu() {
-    println!("-----------------------------------------");
-    println!("Bem vindo ao baixar musicas do youtube");
-    println!("-----------------------------------------");
-    println!("Digite o link da playlist");
 }
