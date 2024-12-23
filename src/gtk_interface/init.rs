@@ -1,5 +1,4 @@
 extern crate gtk;
-use std::sync::{Arc, Mutex};
 
 use gtk::glib::{MainContext, Propagation};
 use gtk::prelude::*;
