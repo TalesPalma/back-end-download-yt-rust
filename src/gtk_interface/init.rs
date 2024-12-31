@@ -1,5 +1,6 @@
 extern crate gtk;
 
+use std::clone;
 use std::process::Command;
 
 use gtk::glib::{MainContext, Propagation};
@@ -59,7 +60,9 @@ pub fn interface() {
         let button_open_folder_clone = button_open_folder.clone();
 
         e.set_sensitive(false);
+        status_bar.push(0, "Baixando musica...");
 
+        let clone_button_donwload = e.clone();
         let context = MainContext::default();
         context.spawn_local(async move {
             match chamar_funcao_baixar_musica(url_text).await {
@@ -69,6 +72,7 @@ pub fn interface() {
                 }
                 Err(_) => {
                     modificar_status_bar("Erro ao baixar: Tente novamente", value_bar);
+                    clone_button_donwload.set_sensitive(true);
                 }
             }
         });
