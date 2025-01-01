@@ -4,7 +4,7 @@ use std::clone;
 use std::process::Command;
 
 use gtk::glib::{MainContext, Propagation};
-use gtk::{prelude::*, Statusbar};
+use gtk::{prelude::*, ProgressBar, Statusbar};
 use gtk::{Button, Entry, Window, WindowType};
 
 use crate::service::service_donwload::baixar_playlist;
@@ -33,12 +33,17 @@ pub fn interface() {
     // entry create
     let text_entry = Entry::new();
 
+    //Create progress bar
+    let progress_bar = ProgressBar::new();
+    progress_bar.set_show_text(true);
+
     // create layout box
     let vbox = gtk::Box::new(gtk::Orientation::Vertical, 10);
     vbox.pack_start(&text_entry, true, false, 0);
     vbox.pack_start(&button_donwload, true, false, 0);
     vbox.pack_start(&status_bar, true, false, 0);
     vbox.pack_end(&button_open_folder, true, false, 0);
+    vbox.pack_end(&progress_bar, true, false, 0);
 
     // add layout to window
     window.add(&vbox);
